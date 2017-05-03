@@ -8,22 +8,21 @@ namespace DataReaderWriter
 {
     public static class StringSource
     {
-        public static IList<string> Convert(ref IList<string> rawData)
+        public static void Convert(ref List<string> rawData)
         {
-            int count = rawData.Count();
+            int count = rawData.Count;
             for(int i = 0; i < count; i++)
             {
                 var line = rawData[i];
                 SwapString(ref line);
             }
-            return rawData;
         }
 
         public static void SwapString(ref string str)
         {
             char dot = '.';
             int pos = str.IndexOf(dot);
-            if (pos == -1 || pos > num.Length)
+            if (pos == -1)
                 return; // no change required
             unsafe
             {
@@ -32,7 +31,7 @@ namespace DataReaderWriter
                     int i = 0;
                     int j = pos+1;
                     int k = 0;
-                    // copy number
+                    // copy first part
                     for (k = 0; k < j; k++)
                         num[k] = pStr[k];
                     
@@ -44,7 +43,7 @@ namespace DataReaderWriter
                     pStr[i] = dot;
                     i++;
                     k = 0;
-                    // insert number
+                    // insert first part
                     while (i < str.Length)
                     {
                         pStr[i] = num[k];
@@ -53,6 +52,8 @@ namespace DataReaderWriter
                 }
             }
         }
-        static char[] num = new char[11]; // max uint + 1
+
+        static char[] num = new char[MAX_STR];
+        const int MAX_STR = 8192;   // 8K
     }
 }

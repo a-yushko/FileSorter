@@ -18,6 +18,8 @@ namespace Benchmarks
             _records = DataSource.ToIEnumerable(_lines).ToList();
             _linkedList = DataSource.ToLinkedList(_lines);
             _strings = _lines.ToList();
+            for (int i = 0; i < 2147483; i++)
+                _ints.Add(i.ToString());
         }
         [TestMethod]
         public void ParseRecords()
@@ -53,7 +55,7 @@ namespace Benchmarks
             Assert.Inconclusive($"SortOrderBy took: {timer.Elapsed}");
         }
 
-        [TestMethod]
+        [Ignore]
         public void SortWithComparer()
         {
             var timer = Stopwatch.StartNew();
@@ -76,7 +78,7 @@ namespace Benchmarks
             Assert.Inconclusive($"SortList took: {timer.Elapsed}");
         }
 
-        [TestMethod]
+        [Ignore]
         public void SortLinkedList()
         {
             var timer = Stopwatch.StartNew();
@@ -98,10 +100,48 @@ namespace Benchmarks
             timer.Stop();
             Assert.Inconclusive($"SortLinkedList took: {timer.Elapsed}");
         }
-        IList<string> _lines;
+
+        [TestMethod]
+        public void IntParse()
+        {
+            var timer = Stopwatch.StartNew();
+
+            foreach (var i in _ints)
+                Int32.Parse(i.ToString());
+
+            timer.Stop();
+            Assert.Inconclusive($"Int32.Parse took: {timer.Elapsed}");
+        }
+
+        [TestMethod]
+        public void IntConvert()
+        {
+            var timer = Stopwatch.StartNew();
+
+            foreach (var i in _ints)
+                DataSource.ToInt32(i);
+
+            timer.Stop();
+            Assert.Inconclusive($"ToInt32 took: {timer.Elapsed}");
+        }
+
+        [TestMethod]
+        public void IntConvert16()
+        {
+            var timer = Stopwatch.StartNew();
+
+            foreach (var i in _ints)
+                DataSource.ToUInt16(i);
+
+            timer.Stop();
+            Assert.Inconclusive($"ToInt32 took: {timer.Elapsed}");
+        }
+
+        List<string> _lines;
         List<DataRecord> _records;
         IEnumerable<DataRecord> _linkedList;
         List<string> _strings;
-        readonly string _path = @"..\..\..\Data\source100m.txt";
+        List<string> _ints = new List<string>();
+        readonly string _path = @"..\..\..\Data\source10m.txt";
     }
 }
