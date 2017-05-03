@@ -43,13 +43,29 @@ namespace DataReaderWriter
             var s = line.Split('.');
             if (s.Length < 2)
                 return null; // skip malformed strings
-            return new DataRecord(UInt16.Parse(s[0]), s[1].TrimStart());
+            return new DataRecord(ToUInt16(s[0]), s[1].TrimStart());
         }
 
         public static IEnumerable<string> ToString(IEnumerable<DataRecord> records)
         {
             foreach (var record in records)
                 yield return record.ToString();
+        }
+
+        public static ushort ToUInt16(string str)
+        {
+            ushort r = 0;
+            for (int i = 0; i < str.Length; i++)
+                r = (ushort)(r * 10 + (str[i] - '0'));
+            return r;
+        }
+
+        public static int ToInt32(string str)
+        {
+            int r = 0;
+            for (int i = 0; i < str.Length; i++)
+                r = r * 10 + (str[i] - '0');
+            return r;
         }
     }
 }

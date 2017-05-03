@@ -25,6 +25,21 @@ namespace DataReaderWriter
             return result;
         }
 
+        public List<string> ReadLines(string path)
+        {
+            var result = new List<string>();
+            using (var reader = File.OpenText(path))
+            {
+                string line = String.Empty;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    StringSource.SwapString(ref line);
+                    result.Add(line);
+                }
+            }
+            return result;
+        }
+
         public IEnumerable<DataRecord> ReadList(string path)
         {
             var result = new LinkedList<DataRecord>();
