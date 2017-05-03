@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace DataGenerator
                     PrintUsage();
                     return;
                 }
-
+                EnsureDirectoryExists(Path.GetDirectoryName(Path.GetFullPath(args[0])));
                 Console.WriteLine($"Writing file {args[0]}");
 
                 var stopwatch = Stopwatch.StartNew();
@@ -40,6 +41,12 @@ namespace DataGenerator
             {
                 Console.WriteLine($"Error occurred: {e.Message}");
             }
+        }
+
+        private static void EnsureDirectoryExists(string path)
+        {
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
         }
 
         private static void PrintUsage()

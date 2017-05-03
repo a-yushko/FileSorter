@@ -1,5 +1,5 @@
 @echo off
-set target=Debug
+set target=Release
 echo %date% %time%
 ..\DataGenerator\bin\%target%\DataGenerator.exe source.txt 1
 ..\DataSorter\bin\%target%\DataSorter.exe source.txt

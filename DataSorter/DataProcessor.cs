@@ -24,8 +24,8 @@ namespace DataSorter
         }
         public void Process(string path, ProcessingOptions options)
         {
-            long pageSize = options.PageSize > 0 ? options.PageSize * MB : GetPageSize(path);
-            if (options.Brute || pageSize == -1)
+            long pageSize = options.PageSize > 0 ? options.PageSize * MB : GetPageSize();
+            if (options.Brute || CanProcessAll(path, pageSize))
                 ProcessAll(path);
             else
                 ProcessPaged(path, pageSize, options.KeepIntermediate);
@@ -83,28 +83,25 @@ namespace DataSorter
             writer.Write(name, DataSource.ToString(records));
         }
 
-        public long GetPageSize(string path)
+        public long GetPageSize()
         {
             long size = -1;
-            try
+            ulong installedMemory;
+            MEMORYSTATUSEX memStatus = new MEMORYSTATUSEX();
+            if (GlobalMemoryStatusEx(memStatus))
             {
-                ulong installedMemory;
-                MEMORYSTATUSEX memStatus = new MEMORYSTATUSEX();
-                if (GlobalMemoryStatusEx(memStatus))
-                {
-                    installedMemory = memStatus.ullTotalPhys;
-                    size = (long)installedMemory / 16;
-                }
-                var info = new FileInfo(path);
-                if (0.9 * info.Length < size)
-                    size = -1;  // file small enough to be processed entirely
-            }
-            catch (IOException e)
-            {
-                logger.WriteLine($"Warning: failed to determine page size. {e.Message}");
-                size = -1;
+                installedMemory = memStatus.ullTotalPhys;
+                size = (long)installedMemory / 16;
             }
             return size;
+        }
+
+        private bool CanProcessAll(string path, long pageSize)
+        {
+            var info = new FileInfo(path);
+            if (0.9 * info.Length < pageSize)
+                return true;  // file small enough to be processed entirely
+            return false;
         }
 
         private void Merge(List<string> filenames, string outfile)

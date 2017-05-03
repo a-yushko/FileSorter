@@ -17,7 +17,7 @@ namespace Benchmarks
         public void GetPageSize()
         {
             var processor = new DataProcessor(new Logger());
-            var size = processor.GetPageSize(@"..\..\..\Data\source16g.txt");
+            var size = processor.GetPageSize();
             Assert.Inconclusive($"Page size is {size}");
         }
 
