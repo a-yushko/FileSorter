@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace DataSorter
+{
+    public class ConsoleSpinner
+    {
+        int counter;
+        public ConsoleSpinner()
+        {
+            counter = 0;
+        }
+        public void Turn()
+        {
+            counter++;
+            switch (counter % 4)
+            {
+                case 0: Console.Write("/"); break;
+                case 1: Console.Write("-"); break;
+                case 2: Console.Write("\\"); break;
+                case 3: Console.Write("|"); break;
+            }
+            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
+        }
+        public static void RunAnimation()
+        {
+            ConsoleSpinner spin = new ConsoleSpinner();
+            while (true)
+            {
+                spin.Turn();
+                Thread.Sleep(100);
+            }
+        }
+    }
+}
