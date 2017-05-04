@@ -137,6 +137,30 @@ namespace Benchmarks
             Assert.Inconclusive($"ToInt32 took: {timer.Elapsed}");
         }
 
+        [TestMethod]
+        public void StringSplit()
+        {
+            var timer = Stopwatch.StartNew();
+
+            foreach (var line in _lines)
+                line.Split('.');
+
+            timer.Stop();
+            Assert.Inconclusive($"StringSplit took: {timer.Elapsed}");
+        }
+
+        [TestMethod]
+        public void CustomSplit()
+        {
+            var timer = Stopwatch.StartNew();
+            string s1, s2;
+            foreach (var line in _lines)
+                DataSource.Split(line, '.', out s1, out s2);
+
+            timer.Stop();
+            Assert.Inconclusive($"CustomSplit took: {timer.Elapsed}");
+        }
+
         List<string> _lines;
         List<DataRecord> _records;
         IEnumerable<DataRecord> _linkedList;

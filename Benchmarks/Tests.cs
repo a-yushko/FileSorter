@@ -115,5 +115,37 @@ namespace Benchmarks
             v1 = DataSource.ToUInt16("65535");
             Assert.AreEqual(65535, v1);
         }
+        [TestMethod]
+        public void TestSplit()
+        {
+            string s1, s2;
+            DataSource.Split("1.Apple", '.', out s1, out s2);
+            Assert.AreEqual("1", s1);
+            Assert.AreEqual("Apple", s2);
+
+            DataSource.Split("Apple.1", '.', out s1, out s2);
+            Assert.AreEqual("Apple", s1);
+            Assert.AreEqual("1", s2);
+
+            DataSource.Split("Apple.", '.', out s1, out s2);
+            Assert.AreEqual("Apple", s1);
+            Assert.AreEqual(String.Empty, s2);
+
+            DataSource.Split(".Apple", '.', out s1, out s2);
+            Assert.AreEqual("", s1);
+            Assert.AreEqual("Apple", s2);
+
+            DataSource.Split("Apple", '.', out s1, out s2);
+            Assert.AreEqual("Apple", s1);
+            Assert.IsNull(s2);
+
+            DataSource.Split(".", '.', out s1, out s2);
+            Assert.AreEqual("", s1);
+            Assert.AreEqual("", s2);
+
+            DataSource.Split("", '.', out s1, out s2);
+            Assert.IsNull(s1, "empty");
+            Assert.IsNull(s2, "empty");
+        }
     }
 }
