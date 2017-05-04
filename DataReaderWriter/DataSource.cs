@@ -40,10 +40,12 @@ namespace DataReaderWriter
         /// <returns></returns>
         public static DataRecord GetRecord(string line)
         {
-            var s = line.Split('.');
-            if (s.Length < 2)
+            string s1, s2;
+            Split(line, '.', out s1, out s2);
+            
+            if (s2 == null)
                 return null; // skip malformed strings
-            return new DataRecord(ToUInt16(s[0]), s[1].TrimStart());
+            return new DataRecord(ToUInt16(s1), s2.TrimStart());
         }
 
         public static IEnumerable<string> ToString(IEnumerable<DataRecord> records)
@@ -66,6 +68,32 @@ namespace DataReaderWriter
             for (int i = 0; i < str.Length; i++)
                 r = r * 10 + (str[i] - '0');
             return r;
+        }
+        // split string into two components
+        public static void Split(string str, char separator, out string s1, out string s2)
+        {
+            s1 = "";
+            s2 = "";
+            int pos = str.IndexOf(separator);
+            if (pos == -1)
+            {
+                if (str.Length > 0)
+                    s1 = str;
+                else
+                    s1 = null;
+                s2 = null;
+            }
+            else if (pos == 0)
+            {
+                if (str.Length > 1)
+                    s2 = str.Substring(pos + 1);
+            }
+            else
+            {
+                s1 = str.Substring(0, pos);
+                if (pos != str.Length - 1)
+                    s2 = str.Substring(pos + 1);
+            }
         }
     }
 }
