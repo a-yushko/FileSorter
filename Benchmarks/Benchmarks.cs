@@ -18,8 +18,6 @@ namespace Benchmarks
             _records = DataSource.ToIEnumerable(_lines).ToList();
             _linkedList = DataSource.ToLinkedList(_lines);
             _strings = _lines.ToList();
-            for (int i = 0; i < 2147483; i++)
-                _ints.Add(i.ToString());
         }
         [TestMethod]
         public void ParseRecords()
@@ -101,71 +99,10 @@ namespace Benchmarks
             Assert.Inconclusive($"SortLinkedList took: {timer.Elapsed}");
         }
 
-        [TestMethod]
-        public void IntParse()
-        {
-            var timer = Stopwatch.StartNew();
-
-            foreach (var i in _ints)
-                Int32.Parse(i.ToString());
-
-            timer.Stop();
-            Assert.Inconclusive($"Int32.Parse took: {timer.Elapsed}");
-        }
-
-        [TestMethod]
-        public void IntConvert()
-        {
-            var timer = Stopwatch.StartNew();
-
-            foreach (var i in _ints)
-                DataSource.ToInt32(i);
-
-            timer.Stop();
-            Assert.Inconclusive($"ToInt32 took: {timer.Elapsed}");
-        }
-
-        [TestMethod]
-        public void IntConvert16()
-        {
-            var timer = Stopwatch.StartNew();
-
-            foreach (var i in _ints)
-                DataSource.ToUInt16(i);
-
-            timer.Stop();
-            Assert.Inconclusive($"ToInt32 took: {timer.Elapsed}");
-        }
-
-        [TestMethod]
-        public void StringSplit()
-        {
-            var timer = Stopwatch.StartNew();
-
-            foreach (var line in _lines)
-                line.Split('.');
-
-            timer.Stop();
-            Assert.Inconclusive($"StringSplit took: {timer.Elapsed}");
-        }
-
-        [TestMethod]
-        public void CustomSplit()
-        {
-            var timer = Stopwatch.StartNew();
-            string s1, s2;
-            foreach (var line in _lines)
-                DataSource.Split(line, '.', out s1, out s2);
-
-            timer.Stop();
-            Assert.Inconclusive($"CustomSplit took: {timer.Elapsed}");
-        }
-
         List<string> _lines;
         List<DataRecord> _records;
         IEnumerable<DataRecord> _linkedList;
         List<string> _strings;
-        List<string> _ints = new List<string>();
         readonly string _path = @"..\..\..\Data\source10m.txt";
     }
 }
